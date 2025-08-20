@@ -1,23 +1,32 @@
 import SearchableLayout from "@/components/searchable-layout";
 import { useRouter } from "next/router";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import BookItem from "@/components/book-item";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import fetchBooks from "@/lib/fetch-books";
+import { IBookData } from "@/components/types";
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  const q = context.query.q;
-  const books = await fetchBooks(q as string);
+// (X)
+// export const getStaticProps = async (context: GetStaticPropsContext) => {
+//   //빌드 타임에 한번만 실행됨으로 쿼리를 알아낼 수 없음 -> 검색결과를 서버로부터 불러올 수 없는 문제
+//   // -> client측에서 직접 진행해야함
+// };
 
-  return {
-    props: { books },
-  };
-};
-
-export default function PageSearch({ books }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function PageSearch() {
+  const [books, setBooks] = useState<IBookData[]>([]);
   const router = useRouter();
   const { q } = router.query;
-  console.log(books);
+
+  const fetchSearchResult = async () => {
+    const data = await fetchBooks(q as string);
+    setBooks(data);
+  };
+
+  useEffect(() => {
+    if (q) {
+      // 검색 결과를 불러오는 로직
+      fetchSearchResult();
+    }
+  }, [q]);
 
   return (
     <div>
