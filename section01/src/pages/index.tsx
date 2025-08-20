@@ -17,6 +17,9 @@ export const getStaticProps = async () => {
       allBooks,
       recomBooks,
     },
+    revalidate: 3, //3초 주기로 재검증
+    //처음에 페이지를 정적으로 제공 → 빠른속도로 렌더링
+    //일정시간을 주기로 데이터 갱신 가능
   };
 };
 
