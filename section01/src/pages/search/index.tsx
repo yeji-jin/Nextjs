@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import BookItem from "@/components/book-item";
 import fetchBooks from "@/lib/fetch-books";
 import { IBookData } from "@/components/types";
+import Head from "next/head";
 
 // (X)
 // export const getStaticProps = async (context: GetStaticPropsContext) => {
@@ -30,6 +31,12 @@ export default function PageSearch() {
 
   return (
     <div>
+      <Head>
+        <title>NextJs Book Store - 검색결과</title>
+        <meta property="og:image" content="/thumbnail.png" />
+        <meta property="og:title" content="NextJs Book Store" />
+        <meta property="og:description" content="한입북스에 등록된 도서들을 만나보세요!" />
+      </Head>
       검색결과 : {q}
       {books.map((book) => (
         <BookItem key={book.id} {...book} />

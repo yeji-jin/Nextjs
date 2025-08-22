@@ -2,6 +2,7 @@ import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import style from "./[id].module.css";
 import fetchOneBook from "@/lib/fetch-onebook";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 export const getStaticPaths = () => {
   return {
@@ -37,24 +38,43 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
 export default function PageBookDetail({ book }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter();
   //page 컴포넌트 fallback 상태일때
-  if (router.isFallback) return "데이터 로딩중...";
+  if (router.isFallback)
+    return (
+      <>
+        <Head>
+          <title>NextJs Book Store</title>
+          <meta property="og:image" content="/thumbnail.png" />
+          <meta property="og:title" content="NextJs Book Store" />
+          <meta property="og:description" content="한입북스에 등록된 도서들을 만나보세요!" />
+        </Head>
+        <div>데이터 로딩중...</div>
+      </>
+    );
   ///page 컴포넌트에서 존재하지 않는 book일때
   if (!book) return "문제가 발생했습니다. 다시 시도하세요!";
   const { id, title, subTitle, description, author, publisher, coverImgUrl } = book;
 
   return (
-    <div className={style.container}>
-      <div className={style.cover_img_container} style={{ backgroundImage: `url('${coverImgUrl}')` }}>
-        <img src={coverImgUrl} alt={title} />
-      </div>
-      <div className={style.book_info}>
-        <h5 className={style.title}>{title}</h5>
-        <div className={style.sub_title}>{subTitle}</div>
-        <div className={style.author}>
-          {author} | {publisher}
+    <>
+      <Head>
+        <title>NextJs Book Store - {title}</title>
+        <meta property="og:image" content={coverImgUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+      </Head>
+      <div className={style.container}>
+        <div className={style.cover_img_container} style={{ backgroundImage: `url('${coverImgUrl}')` }}>
+          <img src={coverImgUrl} alt={title} />
         </div>
-        <div className={style.description}>{description}</div>
+        <div className={style.book_info}>
+          <h5 className={style.title}>{title}</h5>
+          <div className={style.sub_title}>{subTitle}</div>
+          <div className={style.author}>
+            {author} | {publisher}
+          </div>
+          <div className={style.description}>{description}</div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

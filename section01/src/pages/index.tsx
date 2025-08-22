@@ -5,10 +5,11 @@ import BookItem from "@/components/book-item";
 import { InferGetStaticPropsType } from "next";
 import fetchBooks from "@/lib/fetch-books";
 import fetchRandomBooks from "@/lib/fetch-random-books";
+import Head from "next/head";
 
 export const getStaticProps = async () => {
   // 컴포넌트보다 먼저 실행되어, 컴포넌트에 필요한 데이터를 불러오는 함수
-  console.log("index page");
+  // console.log("index page");
   const [allBooks, recomBooks] = await Promise.all([fetchBooks(), fetchRandomBooks()]);
 
   // return값은 props라는 객체를 반환해야함
@@ -33,34 +34,42 @@ export default function Home({ allBooks, recomBooks }: InferGetStaticPropsType<t
         method: "POST",
       });
       const data = await res.json();
-      console.log("Revalidation result:", data);
+      // console.log("Revalidation result:", data);
       // 필요하다면 새 데이터 fetch → 페이지 갱신
       location.reload(); // 가장 단순하게는 페이지 새로고침
     } catch (err) {
-      console.error("Revalidate error:", err);
+      // console.error("Revalidate error:", err);
     }
   };
 
   return (
-    <div className={style.container}>
-      <section>
-        <h3 style={{ display: "flex", justifyContent: "space-between" }}>
-          지금 추천하는 도서
-          <div>
-            <button onClick={handleRevalidate}>🔁 다시 추천받기</button>
-          </div>
-        </h3>
-        {recomBooks.map((book) => (
-          <BookItem key={book.id} {...book}></BookItem>
-        ))}
-      </section>
-      <section>
-        <h3>등록된 모든 도서</h3>
-        {allBooks.map((book) => (
-          <BookItem key={book.id} {...book}></BookItem>
-        ))}
-      </section>
-    </div>
+    <>
+      <Head>
+        <title>NextJs Book Store</title>
+        <meta property="og:image" content="/thumbnail.png" />
+        <meta property="og:title" content="NextJs Book Store" />
+        <meta property="og:description" content="한입북스에 등록된 도서들을 만나보세요!" />
+      </Head>
+      <div className={style.container}>
+        <section>
+          <h3 style={{ display: "flex", justifyContent: "space-between" }}>
+            지금 추천하는 도서
+            <div>
+              <button onClick={handleRevalidate}>🔁 다시 추천받기</button>
+            </div>
+          </h3>
+          {recomBooks.map((book) => (
+            <BookItem key={book.id} {...book}></BookItem>
+          ))}
+        </section>
+        <section>
+          <h3>등록된 모든 도서</h3>
+          {allBooks.map((book) => (
+            <BookItem key={book.id} {...book}></BookItem>
+          ))}
+        </section>
+      </div>
+    </>
   );
 }
 
