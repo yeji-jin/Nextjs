@@ -4,5 +4,11 @@
   gap: 20px;
 }
 .container h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 0;
+}
+.container button {
+  padding: 4px 10px;
 }
