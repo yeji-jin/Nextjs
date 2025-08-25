@@ -1,10 +1,12 @@
 import BookItem from "@/components/book-item";
 import { IBookData } from "@/types";
+import { delay } from "@/util/delay";
 
 // export const dynamic = "error";
 
 export default async function PageSearch({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q } = await searchParams;
+  await delay(2000);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/search?q=${q}`, { cache: "force-cache" });
   if (!response.ok) {
     return <div>데이터를 불러올 수 없습니다.</div>;
