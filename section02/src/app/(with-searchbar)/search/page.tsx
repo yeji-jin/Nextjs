@@ -1,11 +1,9 @@
 import BookItem from "@/components/book-item";
 import { IBookData } from "@/types";
 import { delay } from "@/util/delay";
+import { Suspense } from "react";
 
-// export const dynamic = "error";
-
-export default async function PageSearch({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
-  const { q } = await searchParams;
+async function SearchResult({ q }: { q: string }) {
   await delay(2000);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/search?q=${q}`, { cache: "force-cache" });
   if (!response.ok) {
@@ -22,5 +20,23 @@ export default async function PageSearch({ searchParams }: { searchParams: Promi
         <BookItem key={book.id} {...book} />
       ))}
     </div>
+  );
+}
+
+// export default async function PageSearch({ searchParams }: { searchParams: { q?: string } }) {
+//   return (
+//     <Suspense fallback={<div key={searchParams.q || ""}>Loading중!! Loading중~~</div>}>
+//       <SearchResult q={searchParams.q || ""} />
+//     </Suspense>
+//   );
+// }
+
+export default async function PageSearch({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await searchParams;
+  await delay(2000);
+  return (
+    <Suspense key={q || ""} fallback={<div>Loading중!! Loading중~~</div>}>
+      <SearchResult q={q || ""} />
+    </Suspense>
   );
 }
