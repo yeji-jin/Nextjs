@@ -1,3 +1,4 @@
+import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import style from "./page.module.css";
 import BookItem from "@/components/book-item";
 import { IBookData } from "@/types";
@@ -50,13 +51,14 @@ export default async function Home() {
           지금 추천하는 도서
           <button>🔁 다시 추천받기</button>
         </h3>
-        <Suspense fallback={<div>추천 도서 Loading중!!</div>}>
+
+        <Suspense fallback={<BookListSkeleton count={3} />}>
           <RecomBooks />
         </Suspense>
       </section>
       <section>
         <h3>등록된 모든 도서</h3>
-        <Suspense fallback={<div>모든 도서 Loading중!!</div>}>
+        <Suspense fallback={<BookListSkeleton count={3} />}>
           <AllBooks />
         </Suspense>
       </section>

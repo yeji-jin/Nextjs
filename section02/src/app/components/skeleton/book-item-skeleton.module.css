@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  gap: 16px;
+  padding: 20px 10px;
+  border-bottom: 1px solid #ddd;
+}
+.cover_img {
+  width: 80px;
+  height: 105px;
+  background-color: rgb(230, 230, 230);
+}
+.info_container {
+  flex: 1;
+}
+.title,
+.sub_title,
+.author {
+  width: 100%;
+  height: 20px;
+  background-color: rgb(230, 230, 230);
+}
