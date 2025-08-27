@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  gap: 16px;
+  padding: 20px 10px;
+  border-bottom: 1px solid #ddd;
+}
+.container > img {
+  width: 80px;
+}
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+.sub_title {
+  word-break: keep-all;
+}
+.author {
+  color: #666;
+}
