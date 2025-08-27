@@ -14,6 +14,14 @@ export default function Modal({ children }: { children: ReactNode }) {
       //모달이 꺼져있다면
       dialogRef.current?.showModal();
       dialogRef.current?.scrollTo({ top: 0 });
+
+      // ✅ 모달 열리면 body 스크롤 막기
+      document.body.style.overflow = "hidden";
+
+      // ✅ cleanup (모달 닫히거나 언마운트 시)
+      return () => {
+        document.body.style.overflow = "";
+      };
     }
   }, []);
 

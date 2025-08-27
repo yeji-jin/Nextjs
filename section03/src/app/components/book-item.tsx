@@ -4,7 +4,7 @@ import { IBookData } from "@/types";
 
 export default function bookItem({ id, title, subTitle, description, author, publisher, coverImgUrl }: IBookData) {
   return (
-    <Link href={`/book/${id}`} className={style.container}>
+    <Link href={`/book/${id}`} scroll={false} className={style.container}>
       <img src={coverImgUrl} alt="title" />
       <div>
         <h5 className={style.title}>{title}</h5>

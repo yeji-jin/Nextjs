@@ -3,11 +3,9 @@ import Modal from "@/components/modal";
 
 export default function page(props: any) {
   return (
-    <div>
-      가로채기 성공!
-      <Modal>
-        <BookPage {...props} />
-      </Modal>
-    </div>
+    <Modal>
+      <BookPage {...props} />
+    </Modal>
+    // 모달이 open 되어있을때 뒷배경 페이지 렌더링
   );
 }
