@@ -2,7 +2,24 @@ import BookItem from "@/components/book-item";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import { IBookData } from "@/types";
 import { delay } from "@/util/delay";
+import { Metadata } from "next";
 import { Suspense } from "react";
+
+//set meta
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }): Promise<Metadata> {
+  // 현재페이지의 메타데이터를 동적으로 생성
+  const { q } = await searchParams;
+  console.log(q);
+  return {
+    title: `${q} : 검색결과 - NextJs Book Store`,
+    description: `${q} : 검색결과 - NextJs Book Store`,
+    openGraph: {
+      title: `${q} : 검색결과 - NextJs Book Store`,
+      description: `${q} : 검색결과 - NextJs Book Store`,
+      images: ["/thumbnail.png"], //public dir
+    },
+  };
+}
 
 async function SearchResult({ q }: { q: string }) {
   await delay(2000);

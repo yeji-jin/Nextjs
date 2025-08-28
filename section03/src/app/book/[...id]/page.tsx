@@ -1,13 +1,33 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
-import { IReviewData } from "@/types";
+import { IBookData, IReviewData } from "@/types";
 import ReviewItem from "@/components/review-item";
 import ReviewEditor from "@/components/review-editor";
+import Image from "next/image";
 
 export function generateStaticParams() {
   return [{ id: ["1"] }, { id: ["2"] }, { id: ["3"] }];
 }
 // export const dynamicParams = false; //false 설정시, generateStaticParams에 선언된 페이지 외에는 404페이지 리다이렉션
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${id}`, { cache: "force-cache" });
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const book: IBookData = await response.json();
+  return {
+    title: `${book.title} - NextJs Book Store`,
+    description: `${book.description}`,
+    openGraph: {
+      title: `${book.title} - NextJs Book Store`,
+      description: `${book.description}`,
+      images: [book.coverImgUrl], //public dir
+    },
+  };
+}
 
 async function BookDetail({ bookId }: { bookId: string }) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${bookId}`);
@@ -24,7 +44,7 @@ async function BookDetail({ bookId }: { bookId: string }) {
   return (
     <section>
       <div className={style.cover_img_container} style={{ backgroundImage: `url('${coverImgUrl}')` }}>
-        <img src={coverImgUrl} alt={title} />
+        <Image src={coverImgUrl} width={240} height={300} alt={`도서 ${title}의 표지 이미지`} />
       </div>
       <div className={style.title}>{title}</div>
       <div className={style.subTitle}>{subTitle}</div>
