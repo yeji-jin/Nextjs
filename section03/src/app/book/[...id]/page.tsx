@@ -5,8 +5,14 @@ import ReviewItem from "@/components/review-item";
 import ReviewEditor from "@/components/review-editor";
 import Image from "next/image";
 
-export function generateStaticParams() {
-  return [{ id: ["1"] }, { id: ["2"] }, { id: ["3"] }];
+export async function generateStaticParams() {
+  // 모든 도서의 페이지를 빌드타임에 정적생성
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`);
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+  const books: IBookData[] = await response.json();
+  return books.map((book) => ({ id: [book.id.toString()] }));
 }
 // export const dynamicParams = false; //false 설정시, generateStaticParams에 선언된 페이지 외에는 404페이지 리다이렉션
 

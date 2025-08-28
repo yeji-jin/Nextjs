@@ -2,11 +2,10 @@ import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import style from "./page.module.css";
 import BookItem from "@/components/book-item";
 import { IBookData } from "@/types";
-import { delay } from "@/util/delay";
 import { Suspense } from "react";
 import { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 // 특정 페이지의 유형을 static / dynamic 페이지로 설정해주는 옵션
 // 1. auto : 기본값, 아무것도 강제하지 않음
 // 2. force-dynamic : 페이지를 강제로 dynamic 페이지로 설정
@@ -25,7 +24,6 @@ export const metadata: Metadata = {
 };
 
 async function AllBooks() {
-  await delay(1500);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`);
   if (!response.ok) {
     return <div>데이터를 불러올 수 없습니다.</div>;
@@ -41,7 +39,6 @@ async function AllBooks() {
 }
 
 async function RecomBooks() {
-  await delay(3000);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`, { next: { revalidate: 3 } });
   if (!response.ok) {
     return <div>데이터를 불러올 수 없습니다.</div>;

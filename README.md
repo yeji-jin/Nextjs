@@ -12,4 +12,5 @@ Next.js 공부를 위한 저장소입니다.
 
 #### release
 
-https://next-books-page-two.vercel.app/
+페이지라우터 : https://next-books-page-two.vercel.app/
+앱라우터 : https://next-books-page-app.vercel.app/
