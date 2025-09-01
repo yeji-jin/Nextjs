@@ -4,6 +4,7 @@ import BookItem from "@/components/book-item";
 import { IBookData } from "@/types";
 import { Suspense } from "react";
 import { Metadata } from "next";
+import RefreshButton from "@/components/RefreshButton";
 
 // export const dynamic = "force-dynamic";
 // 특정 페이지의 유형을 static / dynamic 페이지로 설정해주는 옵션
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 async function AllBooks() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`, { cache: "force-cache" });
   if (!response.ok) {
     return <div>데이터를 불러올 수 없습니다.</div>;
   }
@@ -39,17 +40,23 @@ async function AllBooks() {
 }
 
 async function RecomBooks() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`, { next: { revalidate: 3 } });
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`, { next: { revalidate: 0 } });
   if (!response.ok) {
     return <div>데이터를 불러올 수 없습니다.</div>;
   }
   const recommBooks: IBookData[] = await response.json();
   return (
-    <div>
-      {recommBooks.map((book) => (
-        <BookItem key={book.id} {...book}></BookItem>
-      ))}
-    </div>
+    <>
+      <h3>
+        지금 추천하는 도서
+        <RefreshButton />
+      </h3>
+      <div>
+        {recommBooks.map((book) => (
+          <BookItem key={book.id} {...book}></BookItem>
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -57,10 +64,6 @@ export default async function Home() {
   return (
     <div className={style.container}>
       <section>
-        <h3>
-          지금 추천하는 도서
-          <button>🔁 다시 추천받기</button>
-        </h3>
         <Suspense fallback={<BookListSkeleton count={3} />}>
           <RecomBooks />
         </Suspense>
